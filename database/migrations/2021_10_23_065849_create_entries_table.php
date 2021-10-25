@@ -21,6 +21,7 @@ class CreateEntriesTable extends Migration
             $table->string("token");
             $table->string("bill")->nullable();
             $table->dateTime("exit_time")->nullable();
+            $table->string("time_spent_mili")->nullable();
             $table->boolean("is_car_out")->default(0);
             $table->timestamps();
         });

@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\Entry;
 use App\Models\Rate;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\View;
 
 trait EntryServices
 {
@@ -20,6 +21,8 @@ trait EntryServices
             $request["token"] = 0;
         }
         $data = Entry::create($request->toArray());
+        $data["invoice"] = view("welcomeinvoice")->render();
+
         return response()->json($data, 201);
     }
     public function updateEntryService($request)
@@ -77,19 +80,25 @@ trait EntryServices
         $exitTimeInMilliseconds = (int) ($exitCarbonTime->timestamp . str_pad($exitCarbonTime->milli, 3, '0', STR_PAD_LEFT));
 
 
-        $timeSpent = $exitTimeInMilliseconds -  $entryTimeInMilliseconds;
-        $timeSpent = $timeSpent / 1000 /  60 / 60;
+        $timeSpentMili = $exitTimeInMilliseconds -  $entryTimeInMilliseconds;
+
+        $timeSpentHour = $timeSpentMili / 1000 /  60 / 60;
 
         $hourlyRate = Rate::first()->rate;
-        $bill = $hourlyRate * $timeSpent;
+        if (!$hourlyRate) {
+            return response()->json(["message" => "You did not provide hourly rate"], 404);
+        }
+        $bill = $hourlyRate * $timeSpentHour;
 
-        $updatedEntry =  tap(Entry::where(["id" => $request->id]))->update([
+        $data["entry"] =  tap(Entry::where(["id" => $request->id]))->update([
             "exit_time" => $currentTime,
             "bill" => $bill,
-            "is_car_out" => 1
+            "is_car_out" => 1,
+            "time_spent_mili" => $timeSpentMili
 
         ])->first();
 
-        return response()->json($updatedEntry, 200);
+        $data["invoice"] = view("exitinvoice")->render();
+        return response()->json($data, 200);
     }
 }
