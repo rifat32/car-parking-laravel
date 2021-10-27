@@ -23,6 +23,7 @@ class CreateEntriesTable extends Migration
             $table->dateTime("exit_time")->nullable();
             $table->string("time_spent_mili")->nullable();
             $table->boolean("is_car_out")->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

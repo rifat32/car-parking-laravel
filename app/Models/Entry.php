@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Entry extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         "name",
         "phone_number",
@@ -27,7 +28,6 @@ class Entry extends Model
     }
     public function scopeGetIncomeToday($query)
     {
-
         return  $query->whereDate('created_at', \Carbon\Carbon::today("Asia/Dhaka"))->sum("bill");
     }
     public function scopeGetEntry($query, $from_date = null, $to_date = null)

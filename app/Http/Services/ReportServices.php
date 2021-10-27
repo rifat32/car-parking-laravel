@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Entry;
+use Illuminate\Support\Carbon;
 
 trait ReportServices
 {
@@ -28,6 +29,20 @@ trait ReportServices
             return response()->json(["message" => "No report found for the given data"], 404);
         }
         $data["bills"] = $query->sum("bill");
+        return response()->json($data, 200);
+    }
+    public function getMonthlyReportService($request)
+    {
+
+
+        for ($i = 0; $i <= 30; $i++) {
+            $data[$i]["people"] =  Entry::whereDate('created_at', Carbon::today()->subDay($i))->count();
+            $data[$i]["bill"] =  Entry::whereDate('created_at', Carbon::today()->subDay($i))->sum("bill");
+            $data[$i]["date"] = Carbon::today()->subDay($i);
+        }
+
+
+
         return response()->json($data, 200);
     }
 }

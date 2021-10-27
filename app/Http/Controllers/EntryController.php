@@ -34,4 +34,8 @@ class EntryController extends Controller
     {
         return $this->deleteEntryService($request);
     }
+    public function getInvoice(Request $request, $id)
+    {
+        return $this->getInvoiceService($request, $id);
+    }
 }

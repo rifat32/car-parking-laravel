@@ -20,4 +20,8 @@ class ReportController extends Controller
     {
         return $this->getCarReportService($request, $car_number);
     }
+    public function getMonthlyReport(Request $request)
+    {
+        return $this->getMonthlyReportService($request);
+    }
 }

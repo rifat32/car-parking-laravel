@@ -43,5 +43,8 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get("/reports/income/total", [ReportController::class, "getTotalIncome"]);
     Route::get("/report/income/{from_date}/{to_date}", [ReportController::class, "getIncomeByDate"]);
     Route::get("/report/car/{car_number}", [ReportController::class, "getCarReport"]);
+    Route::get("/report/monthly", [ReportController::class, "getMonthlyReport"]);
+
     // /report/car/${formData.car_number}
+    Route::get("/invoice/{id}", [EntryController::class, "getInvoice"]);
 });

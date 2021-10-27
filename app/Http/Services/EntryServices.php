@@ -21,7 +21,9 @@ trait EntryServices
             $request["token"] = 0;
         }
         $data = Entry::create($request->toArray());
-        $data["invoice"] = view("welcomeinvoice")->render();
+        $data["invoice"] = view("welcomeinvoice", [
+            "entry" => $data
+        ])->render();
 
         return response()->json($data, 201);
     }
@@ -98,7 +100,24 @@ trait EntryServices
 
         ])->first();
 
-        $data["invoice"] = view("exitinvoice")->render();
+        $data["invoice"] = view("exitinvoice", [
+            "entry" => $data["entry"]
+        ])->render();
+        return response()->json($data, 200);
+    }
+    public function getInvoiceService($request, $id)
+    {
+        $entry = Entry::where(["id" => $id])->first();
+        if ($entry->is_car_out == 0 || $entry->is_car_out == false) {
+            $data["invoice"] = view("welcomeinvoice", [
+                "entry" => $entry
+            ])->render();
+        } else {
+            $data["invoice"] = view("exitinvoice", [
+                "entry" => $entry
+            ])->render();
+        }
+
         return response()->json($data, 200);
     }
 }
