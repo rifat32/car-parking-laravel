@@ -31,11 +31,15 @@
         "
     >
 
+<h2> Token number: {{$entry->token}}  </h2>
+<h2> Car number: {{$entry->car_number}}  </h2>
+<h2> In time: {{$entry->created_at}}  </h2>
 
 
-
+{{--
+In time
             <h2>Welcome</h2>
-            <h2>Your token is : {{$entry->token}}</h2>
+            <h2>Your token is : {{$entry->token}}</h2> --}}
 
 
 
